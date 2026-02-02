@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;font-family:'Inter',sans-serif}
+    body{margin:0;background:#f3f3f3}
+    .container{display:flex;min-height:100vh}
+
+    /* IZQUIERDA */
+    .left{
+      width:40%;
+      background:linear-gradient(180deg,#000,#111);
+      color:#fff;
+      padding:70px 60px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .left h1{
+      font-size:58px;
+      line-height:1.05;
+      margin:0 0 12px;
+      font-weight:800;
+      letter-spacing:1px;
+    }
+    .line{width:90px;height:4px;background:#1e6cff;margin-bottom:32px}
+    .left p{font-size:15px;line-height:1.65;color:#e0e0e0;max-width:380px}
+
+    /* DERECHA */
+    .right{width:60%;background:#fff;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto}
+    .card{width:430px;padding:60px 0}
+
+    h2{font-size:22px;margin:0 0 10px;font-weight:700}
+    p{font-size:14px;color:#555;margin:0 0 22px}
+
+    label{font-size:13px;font-weight:600;color:#222}
+    .input-box{position:relative}
+    input{
+      width:100%;
+      padding:12px 44px 12px 12px;
+      margin-top:6px;
+      border:1px solid #bdbdbd;
+      border-radius:4px;
+      font-size:14px;
+    }
+    .eye{
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:18px;
+      color:#777;
+    }
+
+    .error{
+      margin-top:8px;
+      font-size:13px;
+      color:#d93025;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    button{
+      width:100%;
+      margin-top:22px;
+      padding:13px;
+      border:none;
+      border-radius:4px;
+      font-weight:600;
+      font-size:14px;
+    }
+    .disabled{background:#eee;color:#aaa;cursor:not-allowed}
+
+    .divider{display:flex;align-items:center;margin:28px 0;color:#777;font-size:13px}
+    .divider::before,.divider::after{content:"";flex:1;height:1px;background:#dcdcdc}
+    .divider span{margin:0 12px}
+
+    .key-btn{
+      background:#fff;
+      border:1px solid #bdbdbd;
+      cursor:pointer;
+    }
+
+    .link{display:block;margin:14px 0;color:#1e6cff;font-size:14px;text-decoration:none}
+
+    .legal{
+      font-size:12px;
+      color:#666;
+      line-height:1.6;
+      margin-top:28px;
+    }
+    .legal a{color:#1e6cff;text-decoration:none}
+
+    .hidden{display:none}
+
+    @media(max-width:900px){
+      .container{flex-direction:column}
+      .left,.right{width:100%}
+      .card{padding:40px 20px}
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- IZQUIERDA -->
+  <div class="left">
+    <h1>BIENVE-<br>NIDO</h1>
+    <div class="line"></div>
+    <p>
+      Descubre millones de eventos, recibe alertas de tus artistas favoritos,
+      equipos, obras de teatro y más. Además de la impresión de tus boletos
+      de forma rápida y segura.
+    </p>
+  </div>
+
+  <!-- DERECHA -->
+  <div class="right">
+    <div class="card">
+
+      <!-- PASO EMAIL -->
+      <div id="stepEmail">
+        <h2>INICIAR SESIÓN</h2>
+        <p>Si no tiene una cuenta, se le pedirá que cree una.</p>
+
+        <label>Correo Electrónico</label>
+        <input type="email" id="email" placeholder="">
+        <div class="error">❗ Por favor, ingresa una dirección de correo electrónico válida.</div>
+
+        <button class="disabled">Continuar</button>
+
+        <div class="divider"><span>o</span></div>
+        <button class="key-btn">🔐 Iniciar sesión con una llave de acceso</button>
+        <a class="link" href="#">Cómo agregar una llave de acceso</a>
+
+        <div class="legal">
+          Al continuar con la siguiente página, aceptas los <a href="#">términos</a> y
+          comprendes que la información se usará como se describe en nuestra
+          <a href="#">Política de Privacidad</a>.<br><br>
+          Podemos utilizar tu información para marketing por correo electrónico.
+          Puedes darte de baja en cualquier momento.
+        </div>
+      </div>
+
+      <!-- PASO PASSWORD -->
+      <div id="stepPassword" class="hidden">
+        <h2>INGRESE SU CONTRASEÑA</h2>
+        <p id="correoTexto"></p>
+
+        <label>Contraseña</label>
+        <div class="input-box">
+          <input type="password" id="pass">
+          <span class="eye" onclick="togglePass()">👁️</span>
+        </div>
+
+        <a class="link" href="#">Olvidé mi contraseña</a>
+
+        <button class="disabled" id="loginBtn">Iniciar sesión</button>
+
+        <div id="procesando" class="hidden" style="margin-top:20px;font-size:14px;color:#444">
+          ⏳ El proceso de transferencia de boleto está en proceso. Por favor, espere…
+        </div>
+
+        <div class="divider"><span>o</span></div>
+        <button class="key-btn">🔐 Iniciar sesión con una llave de acceso</button>
+
+        <a class="link" href="#" onclick="regresar()">Regresar</a>
+
+        <div class="legal">
+          Al continuar con la siguiente página, aceptas los <a href="#">términos</a> y
+          comprendes que la información se usará como se describe en nuestra
+          <a href="#">Política de Privacidad</a>.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const emailInput = document.getElementById('email');
+  const continuarBtn = document.querySelector('#stepEmail button');
+
+  emailInput.addEventListener('input',()=>{
+    if(emailInput.value.includes('@')){
+      continuarBtn.classList.remove('disabled');
+      continuarBtn.onclick = continuar;
+    }else{
+      continuarBtn.classList.add('disabled');
+    }
+  });
+
+  function continuar(){
+    document.getElementById('correoTexto').innerText =
+      'Inicie sesión en su cuenta mediante el correo electrónico ' + emailInput.value;
+    document.getElementById('stepEmail').classList.add('hidden');
+    document.getElementById('stepPassword').classList.remove('hidden');
+  }
+
+  function regresar(){
+    document.getElementById('stepPassword').classList.add('hidden');
+    document.getElementById('stepEmail').classList.remove('hidden');
+  }
+
+    const loginBtn = document.getElementById('loginBtn');
+  const passInput = document.getElementById('pass');
+
+  passInput.addEventListener('input',()=>{
+    if(passInput.value.length >= 4){
+      loginBtn.classList.remove('disabled');
+      loginBtn.onclick = iniciarSesion;
+    }else{
+      loginBtn.classList.add('disabled');
+    }
+  });
+
+  function iniciarSesion(){
+    document.getElementById('procesando').classList.remove('hidden');
+    loginBtn.classList.add('disabled');
+  }
+
+  function togglePass(){
+    const p = document.getElementById('pass');
+    p.type = p.type === 'password' ? 'text' : 'password';
+  }
+</script>
+</body>
+</html>
+l>
